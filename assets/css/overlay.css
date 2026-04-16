@@ -1,0 +1,1348 @@
+/*
+ * OpenAccess WP — Overlay Styles (v1.1 Modern Refresh)
+ * Sections:
+ *  1. Design tokens & fonts
+ *  2. Skip link
+ *  3. Root & positioning
+ *  4. Toggle button
+ *  5. Side panel shell
+ *  6. Panel header
+ *  7. Panel body & sections
+ *  8. Controls — toggle switches
+ *  9. Controls — sliders
+ * 10. Reading guide
+ * 11. Feature CSS classes (seizure, contrast, font, etc.)
+ * 12. ── EASTER EGG: Windows XP theme ──
+ * 13. Responsive & reduced-motion
+ */
+
+/*
+ * OpenDyslexic is lazy-loaded by JS via a <link integrity="…"> element
+ * only when the user activates the Dyslexia-Friendly Font toggle.
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   1. Design tokens
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+  --oawp-accent:          #1a73e8; /* overridden by PHP-passed oawpConfig.accentColor */
+  --oawp-accent-dark:     #1557b0;
+  --oawp-on-accent:       #ffffff;
+  --oawp-surface:         #ffffff;
+  --oawp-surface-raised:  #f8fafc;
+  --oawp-border:          #e2e8f0;
+  --oawp-text-primary:    #0f172a;
+  --oawp-text-secondary:  #64748b;
+  --oawp-switch-on:       #22c55e;
+  --oawp-radius-panel:    16px;
+  --oawp-radius-control:  10px;
+  --oawp-shadow-panel:    0 25px 50px -12px rgba(0,0,0,.25), 0 0 0 1px rgba(0,0,0,.05);
+  --oawp-shadow-btn:      0 4px 16px rgba(26,115,232,.35);
+
+  /* Feature vars */
+  --oawp-line-height:     1.5;
+  --oawp-letter-spacing:  0px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   2. Skip link
+   ───────────────────────────────────────────────────────────────────────────── */
+.oawp-skip-link {
+  position: absolute;
+  top: -999px;
+  left: 0;
+  z-index: 100001;
+  padding: .75em 1.25em;
+  background: #000;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 0 0 6px 0;
+}
+.oawp-skip-link:focus {
+  top: 0;
+  outline: 3px solid #ffbf00;
+  outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   3. Root wrapper
+   ───────────────────────────────────────────────────────────────────────────── */
+#oawp-root {
+  position: fixed;
+  z-index: 99999;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--oawp-text-primary);
+}
+
+#oawp-root.pos-bottom-right { bottom: 1.5rem; right: 1.5rem; }
+#oawp-root.pos-bottom-left  { bottom: 1.5rem; left:  1.5rem; }
+#oawp-root.pos-top-right    { top:    1.5rem; right: 1.5rem; }
+#oawp-root.pos-top-left     { top:    1.5rem; left:  1.5rem; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   4. Floating toggle button
+   ───────────────────────────────────────────────────────────────────────────── */
+#oawp-toggle {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 60px !important;
+  height: 60px !important;
+  min-width: 60px !important;
+  min-height: 60px !important;
+  max-width: 60px !important;
+  max-height: 60px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 50% !important;
+  background: var(--oawp-accent) !important;
+  color: var(--oawp-on-accent) !important;
+  cursor: pointer !important;
+  box-shadow: var(--oawp-shadow-btn) !important;
+  transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, background .2s;
+  position: relative !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  aspect-ratio: 1 / 1 !important;
+}
+#oawp-toggle::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--oawp-accent);
+  opacity: 0;
+  transition: opacity .2s;
+}
+#oawp-toggle:hover {
+  transform: scale(1.1);
+  background: var(--oawp-accent-dark);
+  box-shadow: 0 8px 24px rgba(26,115,232,.5);
+}
+#oawp-toggle:hover::after { opacity: .35; }
+#oawp-toggle:focus-visible {
+  outline: 3px solid #ffbf00;
+  outline-offset: 4px;
+}
+#oawp-toggle[aria-expanded="true"] {
+  transform: scale(.95);
+  background: var(--oawp-accent-dark);
+  box-shadow: 0 2px 8px rgba(26,115,232,.25);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   5. Side panel shell
+   ───────────────────────────────────────────────────────────────────────────── */
+#oawp-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  max-width: 94vw;
+  background: var(--oawp-surface);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--oawp-radius-panel) 0 0 var(--oawp-radius-panel);
+  box-shadow: var(--oawp-shadow-panel);
+  transform: translateX(100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+#oawp-panel:not([hidden]) {
+  transform: translateX(0);
+}
+
+/* Left-side positions */
+#oawp-root.pos-bottom-left #oawp-panel,
+#oawp-root.pos-top-left    #oawp-panel {
+  right: auto;
+  left: 0;
+  border-radius: 0 var(--oawp-radius-panel) var(--oawp-radius-panel) 0;
+  transform: translateX(-100%);
+}
+#oawp-root.pos-bottom-left #oawp-panel:not([hidden]),
+#oawp-root.pos-top-left    #oawp-panel:not([hidden]) {
+  transform: translateX(0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   6. Panel header
+   ───────────────────────────────────────────────────────────────────────────── */
+#oawp-panel-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 1.25rem 1rem 1rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+/* Decorative glow blobs in header */
+#oawp-panel-header::before,
+#oawp-panel-header::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: .4;
+  pointer-events: none;
+}
+#oawp-panel-header::before {
+  width: 100px; height: 100px;
+  background: var(--oawp-accent);
+  top: -30px; right: 20px;
+}
+#oawp-panel-header::after {
+  width: 80px; height: 80px;
+  background: #06b6d4;
+  bottom: -20px; left: 30px;
+}
+
+.oawp-header-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.oawp-header-icon svg { color: #fff; }
+
+.oawp-header-text {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+#oawp-panel-title {
+  display: block;
+  font-size: .95rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.01em;
+}
+.oawp-header-sub {
+  display: block;
+  font-size: .7rem;
+  color: rgba(255,255,255,.5);
+  margin-top: 1px;
+}
+
+.oawp-header-actions {
+  display: flex;
+  gap: .35rem;
+  position: relative;
+  z-index: 1;
+}
+.oawp-header-btn {
+  background: rgba(255,255,255,.1) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  border-radius: 8px !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  aspect-ratio: 1/1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  color: rgba(255,255,255,.8) !important;
+  font-size: 1rem !important;
+  font-family: inherit !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: background .15s, color .15s;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+.oawp-header-btn:hover {
+  background: rgba(255,255,255,.2) !important;
+  color: #fff !important;
+}
+.oawp-header-btn:focus-visible {
+  outline: 2px solid #ffbf00 !important;
+  outline-offset: 2px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   7. Panel body & sections
+   ───────────────────────────────────────────────────────────────────────────── */
+#oawp-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: .75rem 0 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--oawp-border) transparent;
+}
+#oawp-panel-body::-webkit-scrollbar { width: 4px; }
+#oawp-panel-body::-webkit-scrollbar-track { background: transparent; }
+#oawp-panel-body::-webkit-scrollbar-thumb { background: var(--oawp-border); border-radius: 2px; }
+
+.oawp-section {
+  padding: .5rem 0 .75rem;
+}
+.oawp-section + .oawp-section {
+  border-top: 1px solid var(--oawp-border);
+}
+
+.oawp-section-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .25rem 1rem .6rem;
+}
+.oawp-section-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--oawp-accent);
+  flex-shrink: 0;
+}
+.oawp-section-title {
+  margin: 0;
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--oawp-text-secondary);
+}
+
+.oawp-control {
+  padding: .2rem .75rem;
+}
+
+/* Panel footer */
+#oawp-panel-footer {
+  padding: .75rem 1rem;
+  border-top: 1px solid var(--oawp-border);
+  background: var(--oawp-surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  flex-shrink: 0;
+}
+.oawp-wcag-badge {
+  font-size: .65rem;
+  font-weight: 700;
+  color: #fff;
+  background: #16a34a;
+  border-radius: 4px;
+  padding: .2em .5em;
+  letter-spacing: .04em;
+}
+.oawp-footer-hint {
+  margin-left: auto;
+  font-size: .65rem;
+  color: var(--oawp-text-secondary);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   8. Controls — toggle switches
+   ───────────────────────────────────────────────────────────────────────────── */
+.oawp-toggle-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: .65rem;
+  width: 100%;
+  padding: .6em .75em;
+  background: var(--oawp-surface-raised) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--oawp-radius-control);
+  cursor: pointer;
+  font-size: .835rem !important;
+  font-weight: 500 !important;
+  color: var(--oawp-text-primary) !important;
+  text-align: left !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  transition: background .15s, border-color .15s;
+}
+.oawp-toggle-btn:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+.oawp-toggle-btn:focus-visible {
+  outline: 3px solid var(--oawp-accent);
+  outline-offset: 2px;
+}
+.oawp-toggle-btn[aria-pressed="true"] {
+  background: #eef2ff;
+  border-color: #a5b4fc;
+}
+
+/* Switch track + thumb (visual only, aria-pressed drives state) */
+.oawp-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 38px;
+  height: 22px;
+  border-radius: 11px;
+  background: #cbd5e1;
+  flex-shrink: 0;
+  transition: background .2s;
+}
+.oawp-switch-thumb {
+  position: absolute;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
+  transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+.oawp-toggle-btn[aria-pressed="true"] .oawp-switch {
+  background: var(--oawp-switch-on);
+}
+.oawp-toggle-btn[aria-pressed="true"] .oawp-switch-thumb {
+  transform: translateX(16px);
+}
+
+.oawp-btn-icon {
+  font-size: .95rem;
+  flex-shrink: 0;
+  width: 1.2em;
+  text-align: center;
+}
+.oawp-btn-label { flex: 1; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   9. Controls — sliders
+   ───────────────────────────────────────────────────────────────────────────── */
+.oawp-slider-control {
+  padding: .5rem .75rem;
+}
+.oawp-slider-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: .5rem;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--oawp-text-primary);
+}
+.oawp-slider-val {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--oawp-accent);
+  background: #eef2ff;
+  padding: .1em .45em;
+  border-radius: 4px;
+  min-width: 2.5em;
+  text-align: center;
+}
+input[type="range"].oawp-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(
+    to right,
+    var(--oawp-accent) 0%,
+    var(--oawp-accent) var(--oawp-slider-pct, 25%),
+    #e2e8f0 var(--oawp-slider-pct, 25%),
+    #e2e8f0 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"].oawp-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--oawp-accent);
+  border: 3px solid #fff;
+  box-shadow: 0 1px 6px rgba(26,115,232,.4);
+  transition: transform .15s;
+}
+input[type="range"].oawp-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+input[type="range"].oawp-slider:focus-visible {
+  outline: 3px solid var(--oawp-accent);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   10. Reading guide
+   ───────────────────────────────────────────────────────────────────────────── */
+#oawp-reading-guide {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: rgba(99, 102, 241, .08);
+  border-top: 2px solid rgba(99, 102, 241, .4);
+  border-bottom: 2px solid rgba(99, 102, 241, .4);
+  pointer-events: none;
+  z-index: 99998;
+  transform: translateY(-50%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   11. Feature CSS classes
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Stop Animations
+ * Uses animation:none / transition:none rather than near-zero durations.
+ * The duration approach still RUNS the animation (just instantly), so elements
+ * still jump to their hover/mousemove target position. none stops the move entirely.
+ */
+html.oawp-stop-animations *,
+html.oawp-stop-animations *::before,
+html.oawp-stop-animations *::after {
+  animation:      none !important;
+  transition:     none !important;
+  scroll-behavior: auto !important;
+}
+
+/* Seizure Safe — same CSS kill-switch plus GIF hiding.
+ * JS also blocks mousemove events in capture phase (see openaccess.js)
+ * to stop JavaScript-driven parallax / mouse-follow effects that CSS alone
+ * cannot reach.
+ */
+html.oawp-seizure-safe *,
+html.oawp-seizure-safe *::before,
+html.oawp-seizure-safe *::after {
+  animation:  none !important;
+  transition: none !important;
+}
+html.oawp-seizure-safe img[src$=".gif"],
+html.oawp-seizure-safe img[src*=".gif?"] { visibility: hidden; }
+/* Hide all videos and known video embed iframes in seizure-safe mode */
+html.oawp-seizure-safe video,
+html.oawp-seizure-safe iframe[src*="youtube.com"],
+html.oawp-seizure-safe iframe[src*="youtu.be"],
+html.oawp-seizure-safe iframe[src*="vimeo.com"],
+html.oawp-seizure-safe iframe[src*="wistia.net"],
+html.oawp-seizure-safe iframe[src*="loom.com"] { display: none !important; }
+
+/* Pause / Hide Videos feature class */
+html.oawp-pause-videos video { display: none !important; }
+html.oawp-pause-videos iframe[src*="youtube.com"],
+html.oawp-pause-videos iframe[src*="youtu.be"],
+html.oawp-pause-videos iframe[src*="vimeo.com"],
+html.oawp-pause-videos iframe[src*="wistia.net"],
+html.oawp-pause-videos iframe[src*="loom.com"] { display: none !important; }
+/* Also hide videos when Stop Animations is active */
+html.oawp-stop-animations video { display: none !important; }
+html.oawp-stop-animations iframe[src*="youtube.com"],
+html.oawp-stop-animations iframe[src*="youtu.be"],
+html.oawp-stop-animations iframe[src*="vimeo.com"] { display: none !important; }
+
+/* Dyslexia font */
+html.oawp-dyslexic-font,
+html.oawp-dyslexic-font * {
+  font-family: "OpenDyslexic", "Comic Sans MS", cursive !important;
+}
+
+/* Custom spacing */
+html.oawp-custom-spacing * {
+  line-height:    var(--oawp-line-height)    !important;
+  letter-spacing: var(--oawp-letter-spacing) !important;
+}
+
+/* High Contrast — Dark */
+html.oawp-hc-dark,
+html.oawp-hc-dark body { background-color: #000 !important; color: #ffff00 !important; }
+html.oawp-hc-dark * { background-color: #000 !important; color: #ffff00 !important; border-color: #ffff00 !important; box-shadow: none !important; text-shadow: none !important; }
+html.oawp-hc-dark img, html.oawp-hc-dark video, html.oawp-hc-dark svg { filter: brightness(.85); }
+html.oawp-hc-dark a, html.oawp-hc-dark a * { color: #ffff00 !important; text-decoration: underline !important; }
+
+/*
+ * HC Dark — plugin panel overrides.
+ * The broad `*` rule above flattens everything to black+yellow, which makes
+ * the switch track, thumb, and active-state buttons invisible (black on black).
+ * These rules restore clear visual differentiation inside #oawp-root.
+ */
+
+/* Panel shell */
+html.oawp-hc-dark #oawp-panel          { background-color: #111 !important; border-color: #ffff00 !important; }
+html.oawp-hc-dark #oawp-panel-header   { background: #000 !important; border-bottom: 2px solid #ffff00 !important; }
+html.oawp-hc-dark #oawp-panel-footer   { background: #111 !important; border-top: 1px solid #ffff00 !important; }
+html.oawp-hc-dark #oawp-panel-body     { background-color: #111 !important; }
+html.oawp-hc-dark .oawp-section        { border-color: #444 !important; }
+
+/* Unselected toggle — dark bg, yellow border, yellow text (HC rules already handle this) */
+html.oawp-hc-dark #oawp-root .oawp-toggle-btn {
+  background-color: #000 !important;
+  border-color: #ffff00 !important;
+}
+
+/* Switch track (unselected) — make it a dark grey so the yellow thumb is visible */
+html.oawp-hc-dark #oawp-root .oawp-switch             { background: #444 !important; border: 1px solid #ffff00 !important; }
+html.oawp-hc-dark #oawp-root .oawp-switch-thumb        { background: #ffff00 !important; }
+
+/* Selected toggle — inverted: yellow bg, black text — clearly different from unselected */
+html.oawp-hc-dark #oawp-root .oawp-toggle-btn[aria-pressed="true"]   { background-color: #ffff00 !important; border-color: #ffff00 !important; }
+html.oawp-hc-dark #oawp-root .oawp-toggle-btn[aria-pressed="true"] * { color: #000 !important; }
+html.oawp-hc-dark #oawp-root .oawp-toggle-btn[aria-pressed="true"] .oawp-switch       { background: #000 !important; border-color: #000 !important; }
+html.oawp-hc-dark #oawp-root .oawp-toggle-btn[aria-pressed="true"] .oawp-switch-thumb { background: #ffff00 !important; }
+/* The broad `*` rule gives every child span background-color:#000, making
+   black text invisible on the yellow button. Transparent lets the yellow show through. */
+html.oawp-hc-dark #oawp-root .oawp-toggle-btn[aria-pressed="true"] .oawp-btn-icon,
+html.oawp-hc-dark #oawp-root .oawp-toggle-btn[aria-pressed="true"] .oawp-btn-label { background-color: transparent !important; }
+
+/* Sliders */
+html.oawp-hc-dark #oawp-root input[type="range"].oawp-slider { background: #444 !important; }
+html.oawp-hc-dark #oawp-root input[type="range"].oawp-slider::-webkit-slider-thumb { background: #ffff00 !important; border-color: #000 !important; }
+html.oawp-hc-dark #oawp-root .oawp-slider-val { background: #000 !important; color: #ffff00 !important; border: 1px solid #ffff00 !important; }
+html.oawp-hc-dark #oawp-root .oawp-section-dot { background: #ffff00 !important; }
+
+/* High Contrast — Light */
+html.oawp-hc-light,
+html.oawp-hc-light body { background-color: #fff !important; color: #000 !important; }
+html.oawp-hc-light * { background-color: #fff !important; color: #000 !important; border-color: #000 !important; box-shadow: none !important; text-shadow: none !important; }
+html.oawp-hc-light img, html.oawp-hc-light video, html.oawp-hc-light svg { filter: contrast(1.1); }
+html.oawp-hc-light a, html.oawp-hc-light a * { color: #000 !important; text-decoration: underline !important; }
+
+/* HC Light — plugin panel overrides */
+html.oawp-hc-light #oawp-panel          { background-color: #fff !important; border: 2px solid #000 !important; }
+html.oawp-hc-light #oawp-panel-header   { background: #fff !important; border-bottom: 2px solid #000 !important; }
+html.oawp-hc-light #oawp-panel-title,
+html.oawp-hc-light .oawp-header-sub     { color: #000 !important; }
+html.oawp-hc-light #oawp-panel-footer   { background: #eee !important; border-top: 1px solid #000 !important; }
+
+html.oawp-hc-light #oawp-root .oawp-switch             { background: #ccc !important; border: 1px solid #000 !important; }
+html.oawp-hc-light #oawp-root .oawp-switch-thumb        { background: #000 !important; }
+
+/* Selected: inverted — black bg, white text */
+html.oawp-hc-light #oawp-root .oawp-toggle-btn[aria-pressed="true"]   { background-color: #000 !important; border-color: #000 !important; }
+html.oawp-hc-light #oawp-root .oawp-toggle-btn[aria-pressed="true"] * { color: #fff !important; }
+html.oawp-hc-light #oawp-root .oawp-toggle-btn[aria-pressed="true"] .oawp-switch       { background: #fff !important; border-color: #fff !important; }
+html.oawp-hc-light #oawp-root .oawp-toggle-btn[aria-pressed="true"] .oawp-switch-thumb { background: #000 !important; }
+/* The broad `*` rule gives every child span background-color:#fff, making
+   white text invisible on the black button. Transparent lets the black show through. */
+html.oawp-hc-light #oawp-root .oawp-toggle-btn[aria-pressed="true"] .oawp-btn-icon,
+html.oawp-hc-light #oawp-root .oawp-toggle-btn[aria-pressed="true"] .oawp-btn-label { background-color: transparent !important; }
+
+html.oawp-hc-light #oawp-root input[type="range"].oawp-slider { background: #ccc !important; }
+html.oawp-hc-light #oawp-root input[type="range"].oawp-slider::-webkit-slider-thumb { background: #000 !important; border-color: #fff !important; }
+html.oawp-hc-light #oawp-root .oawp-slider-val { background: #fff !important; color: #000 !important; border: 1px solid #000 !important; }
+html.oawp-hc-light #oawp-root .oawp-section-dot { background: #000 !important; }
+
+/* Monochrome */
+html.oawp-monochrome { filter: grayscale(100%); }
+
+/* Invert Colors */
+html.oawp-invert { filter: invert(100%) hue-rotate(180deg); }
+html.oawp-invert img,
+html.oawp-invert video,
+html.oawp-invert picture,
+html.oawp-invert canvas { filter: invert(100%) hue-rotate(180deg); }
+
+/* Enhanced Focus Ring */
+html.oawp-focus-enhancer *:focus,
+html.oawp-focus-enhancer *:focus-visible {
+  outline: 5px solid #00e000 !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 2px #000 !important;
+}
+
+/* Large Cursor */
+html.oawp-big-cursor,
+html.oawp-big-cursor * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M6 2 L6 40 L16 30 L22 44 L28 41 L22 27 L36 27 Z' fill='black' stroke='white' stroke-width='2'/%3E%3C/svg%3E") 6 2, pointer !important;
+}
+
+/* Highlight Links */
+html.oawp-highlight-links a,
+html.oawp-highlight-links [role="link"],
+html.oawp-highlight-links [role="button"] {
+  text-decoration: underline !important;
+  font-weight: 700 !important;
+  outline: 2px dashed var(--oawp-accent) !important;
+  outline-offset: 2px !important;
+}
+
+/* Bigger Targets */
+html.oawp-big-targets a,
+html.oawp-big-targets button,
+html.oawp-big-targets input,
+html.oawp-big-targets select,
+html.oawp-big-targets textarea,
+html.oawp-big-targets [role="button"],
+html.oawp-big-targets [role="link"],
+html.oawp-big-targets [role="checkbox"],
+html.oawp-big-targets [role="radio"] {
+  min-height: 44px !important;
+  min-width: 44px !important;
+  padding-top: .5em !important;
+  padding-bottom: .5em !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   12. ██████████████  EASTER EGG: Windows XP Theme  ██████████████
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Bliss wallpaper background ───────────────────────────────────────────── */
+html.oawp-xp-mode::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    /* sky */
+    linear-gradient(180deg,
+      #1565B7 0%,
+      #3D8FD4 35%,
+      #73BAE8 52%,
+      /* hills */
+      #7DC97D 55%,
+      #4CA84C 65%,
+      #2E8B2E 100%
+    );
+  /* rolling hill curve via a radial gradient on top */
+}
+html.oawp-xp-mode::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse 120% 40% at 50% 58%,
+    #5DBE5D 0%,
+    #4CAF50 30%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* ── Global XP typography & full-page theming ─────────────────────────────── */
+html.oawp-xp-mode,
+html.oawp-xp-mode body {
+  font-family: "Tahoma", "MS Sans Serif", Arial, sans-serif !important;
+  font-size: 11px !important;
+  color: #000 !important;
+}
+/* XP silver-grey desktop background */
+html.oawp-xp-mode body {
+  background-color: #D4D0C8 !important;
+}
+/* Spread Tahoma and kill border-radii across the whole page */
+html.oawp-xp-mode body * {
+  font-family: "Tahoma", "MS Sans Serif", Arial, sans-serif !important;
+  border-radius: 0 !important;
+}
+/* Page layout containers → XP window silver */
+html.oawp-xp-mode div,
+html.oawp-xp-mode main,
+html.oawp-xp-mode article,
+html.oawp-xp-mode section,
+html.oawp-xp-mode aside,
+html.oawp-xp-mode nav,
+html.oawp-xp-mode header,
+html.oawp-xp-mode footer {
+  background-color: #ECE9D8 !important;
+  color: #000 !important;
+}
+/* Headings — XP navy blue, Trebuchet MS like the Start menu */
+html.oawp-xp-mode h1, html.oawp-xp-mode h2, html.oawp-xp-mode h3,
+html.oawp-xp-mode h4, html.oawp-xp-mode h5, html.oawp-xp-mode h6 {
+  color: #003399 !important;
+  font-family: "Trebuchet MS", "Tahoma", sans-serif !important;
+}
+/* Links — classic IE6 blue / purple visited */
+html.oawp-xp-mode a:link    { color: #0000FF !important; }
+html.oawp-xp-mode a:visited { color: #800080 !important; }
+/* Page-level buttons (exclude plugin controls) — beveled silver XP style */
+html.oawp-xp-mode button:not(.oawp-toggle-btn):not(.oawp-header-btn):not(#oawp-toggle) {
+  background: linear-gradient(180deg, #FFFFFF 0%, #ECE9D8 100%) !important;
+  border: 2px solid !important;
+  border-color: #FFFFFF #848484 #848484 #FFFFFF !important;
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 11px !important;
+  padding: 4px 12px !important;
+  color: #000 !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+html.oawp-xp-mode button:not(.oawp-toggle-btn):not(.oawp-header-btn):not(#oawp-toggle):hover {
+  background: linear-gradient(180deg, #dff0ff 0%, #c8e4ff 100%) !important;
+  border-color: #FFFFFF #316AC5 #316AC5 #FFFFFF !important;
+}
+/* Page-level form inputs — sunken inset border */
+html.oawp-xp-mode input:not([type="range"]):not(.oawp-slider),
+html.oawp-xp-mode textarea,
+html.oawp-xp-mode select {
+  background: #ffffff !important;
+  border: 2px inset #ACA899 !important;
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 11px !important;
+  color: #000 !important;
+}
+/* High-specificity overrides: preserve plugin elements killed by the broad rules above */
+html.oawp-xp-mode #oawp-xp-taskbar { background: linear-gradient(180deg, #2163C5 0%, #3585E5 4%, #2163C5 6%, #1A55BB 94%, #1040A0 100%) !important; color: #fff !important; }
+html.oawp-xp-mode #oawp-xp-tray    { background: linear-gradient(180deg, #0F3FAB 0%, #1555CC 50%, #0F3FAB 100%) !important; }
+html.oawp-xp-mode #oawp-xp-clock   { color: #fff !important; }
+html.oawp-xp-mode #oawp-xp-balloon { background: #ffffe1 !important; border-radius: 6px 6px 6px 0 !important; color: #000 !important; }
+
+/* ── XP window chrome on the panel ───────────────────────────────────────── */
+html.oawp-xp-mode #oawp-panel {
+  border-radius: 0 !important;
+  box-shadow: inset -1px -1px 0 #848484, inset 1px 1px 0 #fff, 2px 2px 6px rgba(0,0,0,.4) !important;
+  border: 2px solid #003C74 !important;
+}
+
+html.oawp-xp-mode #oawp-panel-header {
+  background: linear-gradient(180deg, #2B5FD4 0%, #1A3F9C 4%, #2B5FD4 6%, #3B7AE0 50%, #1E55C4 96%, #1A3F9C 100%) !important;
+  border-radius: 0 !important;
+  padding: 4px 6px !important;
+}
+html.oawp-xp-mode #oawp-panel-header::before,
+html.oawp-xp-mode #oawp-panel-header::after { display: none !important; }
+
+html.oawp-xp-mode #oawp-panel-title {
+  font-family: "Trebuchet MS", Tahoma, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,.5) !important;
+}
+html.oawp-xp-mode .oawp-header-sub { display: none !important; }
+
+/* XP close/reset buttons become classic [X] button */
+html.oawp-xp-mode .oawp-header-btn {
+  background: linear-gradient(180deg, #f5b942 0%, #e8920c 50%, #d47200 51%, #f5a815 100%) !important;
+  border: 1px solid #7B4A00 !important;
+  border-radius: 3px !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,.4) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.4) !important;
+  width: 21px !important; height: 21px !important;
+}
+html.oawp-xp-mode .oawp-header-btn:hover {
+  background: linear-gradient(180deg, #ff6060 0%, #cc0000 51%, #ff4040 100%) !important;
+  border-color: #7B0000 !important;
+}
+
+/* XP window body */
+html.oawp-xp-mode #oawp-panel-body {
+  background: #ECE9D8 !important;
+}
+html.oawp-xp-mode #oawp-panel-footer {
+  background: #D4D0C8 !important;
+  border-top: 1px solid #fff !important;
+  box-shadow: inset 0 1px 0 #fff !important;
+}
+
+/* XP section titles */
+html.oawp-xp-mode .oawp-section-title {
+  color: #003399 !important;
+  font-weight: bold !important;
+  font-size: .75rem !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+html.oawp-xp-mode .oawp-section-dot { background: #003399 !important; }
+html.oawp-xp-mode .oawp-section + .oawp-section { border-color: #ACA899 !important; }
+
+/* XP toggle buttons (beveled silver buttons) */
+html.oawp-xp-mode .oawp-toggle-btn {
+  background: linear-gradient(180deg, #fff 0%, #ECE9D8 100%) !important;
+  border: 1px solid #ACA899 !important;
+  border-radius: 3px !important;
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #848484 !important;
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 11px !important;
+  color: #000 !important;
+}
+html.oawp-xp-mode .oawp-toggle-btn:hover {
+  background: linear-gradient(180deg, #dff0ff 0%, #c8e4ff 100%) !important;
+  border-color: #316AC5 !important;
+}
+html.oawp-xp-mode .oawp-toggle-btn[aria-pressed="true"] {
+  background: linear-gradient(180deg, #C8E4FF 0%, #A8D4FF 100%) !important;
+  border-color: #316AC5 !important;
+  box-shadow: inset 1px 1px 0 #84ACFF, inset -1px -1px 0 #316AC5 !important;
+}
+html.oawp-xp-mode .oawp-switch { background: #ACA899 !important; border: 1px solid #7B7878 !important; border-radius: 10px !important; }
+html.oawp-xp-mode .oawp-toggle-btn[aria-pressed="true"] .oawp-switch { background: #316AC5 !important; }
+html.oawp-xp-mode .oawp-switch-thumb { box-shadow: 1px 1px 2px rgba(0,0,0,.3) !important; border-radius: 50% !important; }
+
+/* XP slider */
+html.oawp-xp-mode input[type="range"].oawp-slider {
+  background: #fff !important;
+  border: 1px inset #848484 !important;
+  height: 3px !important;
+}
+html.oawp-xp-mode input[type="range"].oawp-slider::-webkit-slider-thumb {
+  background: linear-gradient(180deg, #fff 0%, #D4D0C8 100%) !important;
+  border: 1px solid #7B7878 !important;
+  box-shadow: 1px 1px 0 #fff, -1px -1px 0 #848484 !important;
+  border-radius: 2px !important;
+}
+html.oawp-xp-mode .oawp-slider-val {
+  background: #fff !important;
+  border: 1px solid #ACA899 !important;
+  color: #000 !important;
+  border-radius: 0 !important;
+}
+
+/* XP toggle floating button — turns into Start button when XP is active */
+html.oawp-xp-mode #oawp-toggle {
+  background: linear-gradient(90deg, #1E7E1E 0%, #3CB83C 30%, #3CB83C 70%, #1E7E1E 100%) !important;
+  border-radius: 12px 12px 12px 12px !important;
+  width: auto !important;
+  height: 34px !important;
+  padding: 0 14px 0 10px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.4) !important;
+  border: 1px solid #1A6A1A !important;
+  font-family: "Trebuchet MS", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: bold !important;
+  font-style: italic !important;
+  letter-spacing: .02em !important;
+  gap: 6px !important;
+}
+html.oawp-xp-mode #oawp-toggle::after { display: none !important; }
+
+/* XP taskbar */
+#oawp-xp-taskbar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: linear-gradient(180deg, #2163C5 0%, #3585E5 4%, #2163C5 6%, #1A55BB 94%, #1040A0 100%);
+  border-top: 1px solid #5B90E8;
+  z-index: 99997;
+  align-items: center;
+  padding: 0 4px;
+  gap: 4px;
+  box-shadow: 0 -1px 4px rgba(0,0,0,.4);
+}
+html.oawp-xp-mode #oawp-xp-taskbar { display: flex; }
+html.oawp-xp-mode #oawp-root { bottom: 46px !important; }
+
+#oawp-xp-tray {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #0F3FAB 0%, #1555CC 50%, #0F3FAB 100%);
+  border-left: 1px solid #0A2F80;
+  padding: 0 10px;
+  height: 100%;
+}
+#oawp-xp-clock {
+  color: #fff;
+  font-family: "Tahoma", sans-serif;
+  font-size: 11px;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  cursor: default;
+}
+
+/* XP notification balloon */
+#oawp-xp-balloon {
+  display: none;
+  position: fixed;
+  bottom: 50px;
+  right: 12px;
+  z-index: 100000;
+  background: #ffffe1;
+  border: 1px solid #848484;
+  border-radius: 6px 6px 6px 0;
+  padding: 10px 14px;
+  max-width: 240px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,.3);
+  font-family: "Tahoma", sans-serif;
+  font-size: 11px;
+  color: #000;
+  animation: oawp-balloon-in .3s ease-out;
+}
+#oawp-xp-balloon::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  border: 8px solid transparent;
+  border-top-color: #848484;
+  border-right-color: #848484;
+  border-left: 0;
+  border-bottom: 0;
+}
+#oawp-xp-balloon strong { display: block; font-size: 12px; margin-bottom: 4px; }
+html.oawp-xp-mode #oawp-xp-balloon { display: block; }
+
+@keyframes oawp-balloon-in {
+  from { opacity: 0; transform: translateY(10px) scale(.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   13. Quick Profiles
+   ───────────────────────────────────────────────────────────────────────────── */
+
+#oawp-profiles {
+  padding: 14px 16px 4px;
+  border-bottom: 1px solid var(--oawp-border);
+}
+
+.oawp-profiles-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.oawp-profiles-label {
+  font-size: .6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--oawp-text-secondary);
+}
+
+.oawp-profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding-bottom: 14px;
+}
+
+.oawp-profile-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 8px 10px;
+  background: var(--oawp-surface-raised);
+  border: 1.5px solid var(--oawp-border);
+  border-radius: var(--oawp-radius-control);
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+  font-size: .6875rem;
+  font-weight: 600;
+  color: var(--oawp-text-secondary);
+  line-height: 1.2;
+  text-align: center;
+  width: 100%;
+}
+
+.oawp-profile-icon {
+  font-size: 1.375rem;
+  line-height: 1;
+}
+
+.oawp-profile-label {
+  font-size: .6875rem;
+}
+
+.oawp-profile-btn:hover {
+  border-color: var(--oawp-accent);
+  color: var(--oawp-accent);
+  background: #f0f7ff;
+}
+
+.oawp-profile-btn[aria-pressed="true"] {
+  background: var(--oawp-accent);
+  border-color: var(--oawp-accent);
+  color: #fff;
+}
+
+.oawp-profile-btn:focus-visible {
+  outline: 3px solid #ffbf00;
+  outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   14. Read Aloud (Text-to-Speech)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Pointer cursor on any hoverable text element when Read Aloud is active */
+.oawp-read-aloud-mode p,
+.oawp-read-aloud-mode h1, .oawp-read-aloud-mode h2, .oawp-read-aloud-mode h3,
+.oawp-read-aloud-mode h4, .oawp-read-aloud-mode h5, .oawp-read-aloud-mode h6,
+.oawp-read-aloud-mode li, .oawp-read-aloud-mode td, .oawp-read-aloud-mode th,
+.oawp-read-aloud-mode blockquote, .oawp-read-aloud-mode figcaption,
+.oawp-read-aloud-mode label, .oawp-read-aloud-mode dt, .oawp-read-aloud-mode dd,
+.oawp-read-aloud-mode a, .oawp-read-aloud-mode button {
+  cursor: pointer !important;
+}
+
+/* Hover: dashed blue outline + very faint tint */
+.oawp-tts-hover {
+  outline: 2px dashed var(--oawp-accent) !important;
+  outline-offset: 3px !important;
+  background-color: rgba(26, 115, 232, .06) !important;
+  border-radius: 2px !important;
+}
+
+/* Speaking: solid outline + slightly stronger tint */
+.oawp-tts-speaking {
+  outline: 2px solid var(--oawp-accent) !important;
+  outline-offset: 3px !important;
+  background-color: rgba(26, 115, 232, .14) !important;
+  border-radius: 2px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   15. Responsive & reduced-motion
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 380px) {
+  #oawp-panel { width: 100vw; max-width: 100vw; border-radius: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #oawp-panel         { transition: none; }
+  #oawp-toggle        { transition: none; }
+  .oawp-toggle-btn    { transition: none; }
+  .oawp-switch        { transition: none; }
+  .oawp-switch-thumb  { transition: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   16. Cursor Crosshair
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Crosshair cursor shape */
+html.oawp-cursor-crosshair,
+html.oawp-cursor-crosshair * {
+  cursor: crosshair !important;
+}
+
+/* Full-page crosshair lines (JS-created elements) */
+#oawp-crosshair-h {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(99, 102, 241, .55);
+  pointer-events: none;
+  z-index: 99997;
+  transform: translateY(-50%);
+}
+#oawp-crosshair-v {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(99, 102, 241, .55);
+  pointer-events: none;
+  z-index: 99997;
+  transform: translateX(-50%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   17. Color modes — Eye Safe, Blue Light Filter, Rainbow Text
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Eye Safe — warm amber tones, softer contrast */
+html.oawp-eye-safe,
+html.oawp-eye-safe body {
+  background-color: #fdf6e3 !important;
+  color: #4a3728 !important;
+}
+html.oawp-eye-safe * {
+  background-color: #fdf6e3 !important;
+  color: #4a3728 !important;
+  border-color: #c9a96e !important;
+}
+html.oawp-eye-safe a, html.oawp-eye-safe a * { color: #8b5e3c !important; text-decoration: underline !important; }
+/* Preserve plugin panel in eye-safe mode */
+html.oawp-eye-safe #oawp-root,
+html.oawp-eye-safe #oawp-root * { background-color: unset !important; color: unset !important; border-color: unset !important; }
+
+/* Blue Light Filter — warm sepia overlay via filter */
+html.oawp-blue-light {
+  filter: sepia(25%) saturate(85%) brightness(0.97) !important;
+}
+html.oawp-blue-light #oawp-root { filter: none !important; }
+
+/* Rainbow Text — animated spectrum on text content */
+@keyframes oawp-rainbow {
+  0%   { color: #e53e3e; }
+  16%  { color: #dd6b20; }
+  33%  { color: #d69e2e; }
+  50%  { color: #38a169; }
+  66%  { color: #3182ce; }
+  83%  { color: #805ad5; }
+  100% { color: #e53e3e; }
+}
+html.oawp-rainbow-text p,
+html.oawp-rainbow-text h1, html.oawp-rainbow-text h2, html.oawp-rainbow-text h3,
+html.oawp-rainbow-text h4, html.oawp-rainbow-text h5, html.oawp-rainbow-text h6,
+html.oawp-rainbow-text li, html.oawp-rainbow-text a, html.oawp-rainbow-text span,
+html.oawp-rainbow-text td, html.oawp-rainbow-text th, html.oawp-rainbow-text label {
+  animation: oawp-rainbow 4s linear infinite !important;
+}
+html.oawp-rainbow-text #oawp-root,
+html.oawp-rainbow-text #oawp-root * { animation: none !important; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   18. Tool descriptions
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.oawp-btn-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.oawp-btn-label {
+  font-size: .835rem !important;
+  font-weight: 500 !important;
+  color: var(--oawp-text-primary) !important;
+  line-height: 1.2 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+.oawp-btn-desc {
+  font-size: .68rem !important;
+  font-weight: 400 !important;
+  color: #475569 !important;
+  line-height: 1.35 !important;
+  white-space: normal !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  opacity: 1 !important;
+}
+/* Hide label flex from the flat .oawp-btn-label rule that was on the old structure */
+.oawp-toggle-btn .oawp-btn-text { flex: 1; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   19. Reading Mode overlay
+   ───────────────────────────────────────────────────────────────────────────── */
+
+#oawp-reader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99990;
+  background: #fafaf8;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#oawp-reader-header {
+  width: 100%;
+  max-width: 800px;
+  padding: .75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  background: #fafaf8;
+  z-index: 1;
+}
+
+#oawp-reader-close {
+  display: inline-flex;
+  align-items: center;
+  gap: .4em;
+  padding: .45em .9em;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+#oawp-reader-close:hover { background: #1557b0; }
+#oawp-reader-close:focus-visible { outline: 3px solid #ffbf00; outline-offset: 2px; }
+
+#oawp-reader-content {
+  width: 100%;
+  max-width: 720px;
+  padding: 3rem 1.5rem 5rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.125rem;
+  line-height: 1.85;
+  color: #1a1a1a;
+}
+#oawp-reader-content img  { max-width: 100%; height: auto; }
+#oawp-reader-content h1,
+#oawp-reader-content h2,
+#oawp-reader-content h3 { font-family: Georgia, serif; line-height: 1.3; margin: 1.5em 0 .5em; }
+#oawp-reader-content p   { margin: 0 0 1em; }
+#oawp-reader-content a   { color: #1a73e8; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   20. CSS Isolation — protect panel from site-wide resets
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Ensure box-sizing is consistent inside the plugin root */
+#oawp-root,
+#oawp-root * {
+  box-sizing: border-box;
+}
+
+/* Re-assert font/line-height so site resets like line-height:1 can't cascade in */
+#oawp-root {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Prevent site button resets from removing our button styles */
+#oawp-root button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+  color: inherit;
+  background: transparent;
+}
+
+/* Prevent site img resets from breaking SVG icons */
+#oawp-root svg {
+  display: inline-block !important;
+  overflow: visible !important;
+  max-width: none !important;
+  height: auto !important;
+  vertical-align: middle !important;
+}
+/* The toggle button's SVG must stay exactly 60×60 */
+#oawp-toggle svg {
+  width: 60px !important;
+  height: 60px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Prevent site list resets from affecting panel items */
+#oawp-root ul,
+#oawp-root ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
