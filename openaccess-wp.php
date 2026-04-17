@@ -3,7 +3,7 @@
  * Plugin Name:       Curb Cut
  * Plugin URI:        https://github.com/D23M23/CurbCut-WP
  * Description:       Level the web for all users. A real-time accessibility overlay providing WCAG 2.1 AA and CA.gov compliant features: motion safety, visual customization, contrast profiles, and navigation aids.
- * Version:           1.3.4
+ * Version:           1.3.5
  * Author:            OpenAccess WP Contributors
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'OAWP_VERSION', '1.3.4' );
+define( 'OAWP_VERSION', '1.3.5' );
 define( 'OAWP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OAWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
