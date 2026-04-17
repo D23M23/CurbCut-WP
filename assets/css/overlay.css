@@ -1306,8 +1306,11 @@ html.oawp-rainbow-text #oawp-root * { animation: none !important; }
 }
 
 /* Re-assert font/line-height so site resets like line-height:1 can't cascade in */
+#oawp-root,
+#oawp-root * {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif !important;
+}
 #oawp-root {
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.5;
 }
