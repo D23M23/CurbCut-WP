@@ -4,7 +4,7 @@ Tags: accessibility, wcag, ada, screen-reader, contrast, dyslexia, seizure-safe,
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.3.5
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,7 @@ Level the web for all users. A real-time accessibility overlay providing WCAG 2.
 
 == Installation ==
 
-1. Upload the `openaccess-wp` folder to `/wp-content/plugins/`
+1. Upload the `curbcut-wp` folder to `/wp-content/plugins/`
 2. Activate the plugin through **Plugins > Installed Plugins**
 3. Configure via **Settings > Accessibility**
 4. Ensure your theme calls `wp_body_open()` to enable the Skip to Content link

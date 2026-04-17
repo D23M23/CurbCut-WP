@@ -10,7 +10,7 @@
  *   updated       — date string, e.g. "April 2026"
  *   lang          — "en" (default) or "es" for Spanish
  *
- * @package OpenAccessWP
+ * @package CurbcutWP
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

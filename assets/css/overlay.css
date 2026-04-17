@@ -1,5 +1,5 @@
 /*
- * OpenAccess WP — Overlay Styles (v1.1 Modern Refresh)
+ * Curbcut WP — Overlay Styles (v1.1 Modern Refresh)
  * Sections:
  *  1. Design tokens & fonts
  *  2. Skip link
@@ -525,7 +525,7 @@ html.oawp-stop-animations *::after {
 }
 
 /* Seizure Safe — same CSS kill-switch plus GIF hiding.
- * JS also blocks mousemove events in capture phase (see openaccess.js)
+ * JS also blocks mousemove events in capture phase (see curbcut.js)
  * to stop JavaScript-driven parallax / mouse-follow effects that CSS alone
  * cannot reach.
  */

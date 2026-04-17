@@ -1,5 +1,5 @@
 /**
- * OpenAccess WP — Front-End Accessibility Engine
+ * Curbcut WP — Front-End Accessibility Engine
  *
  * Architecture:
  *  - Zero dependencies (Vanilla JS / ES6).
@@ -8,7 +8,7 @@
  *  - Mutually exclusive features handled via EXCLUSIVE_GROUPS.
  *  - Easter egg: Konami code (↑↑↓↓←→←→BA) triggers Windows XP mode.
  *
- * @package OpenAccessWP
+ * @package CurbcutWP
  * @since   1.0.0
  */
 

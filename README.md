@@ -70,7 +70,7 @@ Type the **Konami code** (`↑ ↑ ↓ ↓ ← → ← → B A`) to activate **W
 ## Installation
 
 1. Download or clone this repository
-2. Upload the `openaccess-wp` folder to `/wp-content/plugins/`
+2. Upload the `curbcut-wp` folder to `/wp-content/plugins/`
 3. Activate via **Plugins > Installed Plugins**
 4. Configure via **Settings > Accessibility**
 5. Ensure your theme calls `wp_body_open()` to enable the Skip to Content link
@@ -120,14 +120,14 @@ Optional attributes:
 ## File Structure
 
 ```
-openaccess-wp/
-├── openaccess-wp.php                   ← Plugin bootstrap, overlay HTML, skip link
+curbcut-wp/
+├── curbcut-wp.php                   ← Plugin bootstrap, overlay HTML, skip link
 ├── includes/
 │   ├── admin.php                       ← WP admin settings page
 │   └── accessibility-statement.php    ← [curb_cut_statement] shortcode
 ├── assets/
 │   ├── css/overlay.css                 ← All overlay UI + feature CSS
-│   └── js/openaccess.js               ← Full JS engine
+│   └── js/curbcut.js               ← Full JS engine
 └── readme.txt                          ← WordPress.org readme
 ```
 

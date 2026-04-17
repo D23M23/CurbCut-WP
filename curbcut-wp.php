@@ -3,22 +3,22 @@
  * Plugin Name:       Curb Cut
  * Plugin URI:        https://github.com/D23M23/CurbCut-WP
  * Description:       Level the web for all users. A real-time accessibility overlay providing WCAG 2.1 AA and CA.gov compliant features: motion safety, visual customization, contrast profiles, and navigation aids.
- * Version:           1.3.5
- * Author:            OpenAccess WP Contributors
+ * Version:           2.0.0
+ * Author:            Curbcut WP Contributors
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       curb-cut
  * Requires at least: 5.8
  * Requires PHP:      7.4
  *
- * @package OpenAccessWP
+ * @package CurbcutWP
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'OAWP_VERSION', '1.3.5' );
+define( 'OAWP_VERSION', '2.0.0' );
 define( 'OAWP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OAWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -36,15 +36,15 @@ function oawp_enqueue_assets() {
 	}
 
 	wp_enqueue_style(
-		'openaccess-wp',
+		'curbcut-wp',
 		OAWP_PLUGIN_URL . 'assets/css/overlay.css',
 		[],
 		OAWP_VERSION
 	);
 
 	wp_enqueue_script(
-		'openaccess-wp',
-		OAWP_PLUGIN_URL . 'assets/js/openaccess.js',
+		'curbcut-wp',
+		OAWP_PLUGIN_URL . 'assets/js/curbcut.js',
 		[],
 		OAWP_VERSION,
 		true // Load in footer.
@@ -52,15 +52,15 @@ function oawp_enqueue_assets() {
 
 	// Pass PHP options and translatable strings to JS.
 	wp_localize_script(
-		'openaccess-wp',
+		'curbcut-wp',
 		'oawpConfig',
 		[
 			'buttonPosition' => esc_js( $options['button_position'] ),
 			'accentColor'    => esc_js( $options['accent_color'] ),
 			'skipTargetId'   => esc_js( $options['skip_target_id'] ),
 			'i18n'           => [
-				'openMenu'  => esc_js( __( 'Open accessibility menu', 'openaccess-wp' ) ),
-				'closeMenu' => esc_js( __( 'Close accessibility menu', 'openaccess-wp' ) ),
+				'openMenu'  => esc_js( __( 'Open accessibility menu', 'curbcut-wp' ) ),
+				'closeMenu' => esc_js( __( 'Close accessibility menu', 'curbcut-wp' ) ),
 			],
 		]
 	);
@@ -101,8 +101,8 @@ function oawp_render_overlay() {
 		return;
 	}
 	?>
-	<!-- OpenAccess WP Overlay -->
-	<div id="oawp-root" role="region" aria-label="<?php esc_attr_e( 'Accessibility Controls', 'openaccess-wp' ); ?>">
+	<!-- Curbcut WP Overlay -->
+	<div id="oawp-root" role="region" aria-label="<?php esc_attr_e( 'Accessibility Controls', 'curbcut-wp' ); ?>">
 
 		<!-- Floating toggle button — wrapper locks the 60×60 shape against site CSS -->
 		<div style="display:block;width:60px;height:60px;min-width:60px;min-height:60px;flex-shrink:0;padding:0;margin:0;overflow:visible;">
@@ -110,8 +110,8 @@ function oawp_render_overlay() {
 			id="oawp-toggle"
 			aria-expanded="false"
 			aria-controls="oawp-panel"
-			aria-label="<?php esc_attr_e( 'Open accessibility menu', 'openaccess-wp' ); ?>"
-			title="<?php esc_attr_e( 'Accessibility', 'openaccess-wp' ); ?>"
+			aria-label="<?php esc_attr_e( 'Open accessibility menu', 'curbcut-wp' ); ?>"
+			title="<?php esc_attr_e( 'Accessibility', 'curbcut-wp' ); ?>"
 			style="width:60px;height:60px;min-width:60px;min-height:60px;padding:0;margin:0;border-radius:50%;box-sizing:border-box;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;"
 		>
 			<!-- Accessible Icon Project — accessibleicon.org — Public Domain -->
@@ -129,7 +129,7 @@ function oawp_render_overlay() {
 			id="oawp-panel"
 			role="dialog"
 			aria-modal="false"
-			aria-label="<?php esc_attr_e( 'Accessibility settings', 'openaccess-wp' ); ?>"
+			aria-label="<?php esc_attr_e( 'Accessibility settings', 'curbcut-wp' ); ?>"
 			hidden
 		>
 
@@ -144,19 +144,19 @@ function oawp_render_overlay() {
 					</svg>
 				</div>
 				<div class="oawp-header-text">
-					<span id="oawp-panel-title"><?php esc_html_e( 'Accessibility', 'openaccess-wp' ); ?></span>
+					<span id="oawp-panel-title"><?php esc_html_e( 'Accessibility', 'curbcut-wp' ); ?></span>
 				</div>
 				<div class="oawp-header-actions">
 					<button
 						id="oawp-reset"
 						class="oawp-header-btn"
-						title="<?php esc_attr_e( 'Reset all settings', 'openaccess-wp' ); ?>"
-						aria-label="<?php esc_attr_e( 'Reset all accessibility settings', 'openaccess-wp' ); ?>"
+						title="<?php esc_attr_e( 'Reset all settings', 'curbcut-wp' ); ?>"
+						aria-label="<?php esc_attr_e( 'Reset all accessibility settings', 'curbcut-wp' ); ?>"
 					>&#8635;</button>
 					<button
 						id="oawp-close"
 						class="oawp-header-btn"
-						aria-label="<?php esc_attr_e( 'Close accessibility menu', 'openaccess-wp' ); ?>"
+						aria-label="<?php esc_attr_e( 'Close accessibility menu', 'curbcut-wp' ); ?>"
 					>&#10005;</button>
 				</div>
 			</div>
@@ -168,24 +168,24 @@ function oawp_render_overlay() {
 				<div id="oawp-profiles">
 					<div class="oawp-profiles-header">
 						<span class="oawp-section-dot" aria-hidden="true"></span>
-						<span class="oawp-profiles-label"><?php esc_html_e( 'Quick Profiles', 'openaccess-wp' ); ?></span>
+						<span class="oawp-profiles-label"><?php esc_html_e( 'Quick Profiles', 'curbcut-wp' ); ?></span>
 					</div>
-					<div class="oawp-profiles-grid" role="group" aria-label="<?php esc_attr_e( 'Accessibility profiles', 'openaccess-wp' ); ?>">
+					<div class="oawp-profiles-grid" role="group" aria-label="<?php esc_attr_e( 'Accessibility profiles', 'curbcut-wp' ); ?>">
 						<button class="oawp-profile-btn" data-profile="dyslexia" aria-pressed="false">
 							<span class="oawp-profile-icon" aria-hidden="true">&#128214;</span>
-							<span class="oawp-profile-label"><?php esc_html_e( 'Dyslexia', 'openaccess-wp' ); ?></span>
+							<span class="oawp-profile-label"><?php esc_html_e( 'Dyslexia', 'curbcut-wp' ); ?></span>
 						</button>
 						<button class="oawp-profile-btn" data-profile="lowVision" aria-pressed="false">
 							<span class="oawp-profile-icon" aria-hidden="true">&#128065;</span>
-							<span class="oawp-profile-label"><?php esc_html_e( 'Low Vision', 'openaccess-wp' ); ?></span>
+							<span class="oawp-profile-label"><?php esc_html_e( 'Low Vision', 'curbcut-wp' ); ?></span>
 						</button>
 						<button class="oawp-profile-btn" data-profile="seizureSafe" aria-pressed="false">
 							<span class="oawp-profile-icon" aria-hidden="true">&#9889;</span>
-							<span class="oawp-profile-label"><?php esc_html_e( 'Seizure Safe', 'openaccess-wp' ); ?></span>
+							<span class="oawp-profile-label"><?php esc_html_e( 'Seizure Safe', 'curbcut-wp' ); ?></span>
 						</button>
 						<button class="oawp-profile-btn" data-profile="focus" aria-pressed="false">
 							<span class="oawp-profile-icon" aria-hidden="true">&#127919;</span>
-							<span class="oawp-profile-label"><?php esc_html_e( 'ADHD / Focus', 'openaccess-wp' ); ?></span>
+							<span class="oawp-profile-label"><?php esc_html_e( 'ADHD / Focus', 'curbcut-wp' ); ?></span>
 						</button>
 					</div>
 				</div>
@@ -194,23 +194,23 @@ function oawp_render_overlay() {
 				<section class="oawp-section" aria-labelledby="oawp-sec-motion">
 					<div class="oawp-section-header">
 						<span class="oawp-section-dot" aria-hidden="true"></span>
-						<h3 id="oawp-sec-motion" class="oawp-section-title"><?php esc_html_e( 'Motion & Seizure Safety', 'openaccess-wp' ); ?></h3>
+						<h3 id="oawp-sec-motion" class="oawp-section-title"><?php esc_html_e( 'Motion & Seizure Safety', 'curbcut-wp' ); ?></h3>
 					</div>
-					<?php oawp_toggle_btn( 'seizureSafe',    '&#9889;',        __( 'Seizure Safe Mode',   'openaccess-wp' ), __( 'Stops flashing animations and motion that may trigger seizures.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'stopAnimations', '&#9646;&#9646;', __( 'Stop All Animations', 'openaccess-wp' ), __( 'Freezes CSS animations, transitions, and auto-playing content.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'pauseVideos',    '&#9654;',        __( 'Pause / Hide Videos', 'openaccess-wp' ), __( 'Hides all video content including YouTube and Vimeo embeds.', 'openaccess-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'seizureSafe',    '&#9889;',        __( 'Seizure Safe Mode',   'curbcut-wp' ), __( 'Stops flashing animations and motion that may trigger seizures.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'stopAnimations', '&#9646;&#9646;', __( 'Stop All Animations', 'curbcut-wp' ), __( 'Freezes CSS animations, transitions, and auto-playing content.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'pauseVideos',    '&#9654;',        __( 'Pause / Hide Videos', 'curbcut-wp' ), __( 'Hides all video content including YouTube and Vimeo embeds.', 'curbcut-wp' ) ); ?>
 				</section>
 
 				<!-- ── Section 2: Visual Customization ───────────────────── -->
 				<section class="oawp-section" aria-labelledby="oawp-sec-visual">
 					<div class="oawp-section-header">
 						<span class="oawp-section-dot" aria-hidden="true"></span>
-						<h3 id="oawp-sec-visual" class="oawp-section-title"><?php esc_html_e( 'Visual Customization', 'openaccess-wp' ); ?></h3>
+						<h3 id="oawp-sec-visual" class="oawp-section-title"><?php esc_html_e( 'Visual Customization', 'curbcut-wp' ); ?></h3>
 					</div>
 
 					<div class="oawp-control oawp-slider-control">
 						<div class="oawp-slider-label">
-							<label for="oawp-font-size"><?php esc_html_e( 'Text Size', 'openaccess-wp' ); ?></label>
+							<label for="oawp-font-size"><?php esc_html_e( 'Text Size', 'curbcut-wp' ); ?></label>
 							<span id="oawp-font-size-val" class="oawp-slider-val" aria-live="polite">100%</span>
 						</div>
 						<input type="range" id="oawp-font-size" class="oawp-slider" data-feature="fontSize"
@@ -220,7 +220,7 @@ function oawp_render_overlay() {
 
 					<div class="oawp-control oawp-slider-control">
 						<div class="oawp-slider-label">
-							<label for="oawp-zoom"><?php esc_html_e( 'Page Zoom', 'openaccess-wp' ); ?></label>
+							<label for="oawp-zoom"><?php esc_html_e( 'Page Zoom', 'curbcut-wp' ); ?></label>
 							<span id="oawp-zoom-val" class="oawp-slider-val" aria-live="polite">100%</span>
 						</div>
 						<input type="range" id="oawp-zoom" class="oawp-slider" data-feature="zoom"
@@ -230,7 +230,7 @@ function oawp_render_overlay() {
 
 					<div class="oawp-control oawp-slider-control">
 						<div class="oawp-slider-label">
-							<label for="oawp-line-height"><?php esc_html_e( 'Line Spacing', 'openaccess-wp' ); ?></label>
+							<label for="oawp-line-height"><?php esc_html_e( 'Line Spacing', 'curbcut-wp' ); ?></label>
 							<span id="oawp-line-height-val" class="oawp-slider-val" aria-live="polite">1.5</span>
 						</div>
 						<input type="range" id="oawp-line-height" class="oawp-slider" data-feature="lineHeight"
@@ -240,7 +240,7 @@ function oawp_render_overlay() {
 
 					<div class="oawp-control oawp-slider-control">
 						<div class="oawp-slider-label">
-							<label for="oawp-letter-spacing"><?php esc_html_e( 'Letter Spacing', 'openaccess-wp' ); ?></label>
+							<label for="oawp-letter-spacing"><?php esc_html_e( 'Letter Spacing', 'curbcut-wp' ); ?></label>
 							<span id="oawp-letter-spacing-val" class="oawp-slider-val" aria-live="polite">0px</span>
 						</div>
 						<input type="range" id="oawp-letter-spacing" class="oawp-slider" data-feature="letterSpacing"
@@ -248,47 +248,47 @@ function oawp_render_overlay() {
 							aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" aria-valuetext="0px">
 					</div>
 
-					<?php oawp_toggle_btn( 'dyslexicFont',  '&#128196;', __( 'Dyslexia-Friendly Font', 'openaccess-wp' ), __( 'Switches to OpenDyslexic, designed to improve text readability.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'readingGuide',  '&#8212;',   __( 'Reading Guide',          'openaccess-wp' ), __( 'Adds a highlight bar that follows your cursor line by line.', 'openaccess-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'dyslexicFont',  '&#128196;', __( 'Dyslexia-Friendly Font', 'curbcut-wp' ), __( 'Switches to OpenDyslexic, designed to improve text readability.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'readingGuide',  '&#8212;',   __( 'Reading Guide',          'curbcut-wp' ), __( 'Adds a highlight bar that follows your cursor line by line.', 'curbcut-wp' ) ); ?>
 				</section>
 
 				<!-- ── Section 3: Contrast & Color ───────────────────────── -->
 				<section class="oawp-section" aria-labelledby="oawp-sec-contrast">
 					<div class="oawp-section-header">
 						<span class="oawp-section-dot" aria-hidden="true"></span>
-						<h3 id="oawp-sec-contrast" class="oawp-section-title"><?php esc_html_e( 'Contrast & Color', 'openaccess-wp' ); ?></h3>
+						<h3 id="oawp-sec-contrast" class="oawp-section-title"><?php esc_html_e( 'Contrast & Color', 'curbcut-wp' ); ?></h3>
 					</div>
-					<?php oawp_toggle_btn( 'highContrastDark',  '&#9790;', __( 'High Contrast (Dark)',  'openaccess-wp' ), __( 'Black background with yellow text for maximum contrast.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'highContrastLight', '&#9788;', __( 'High Contrast (Light)', 'openaccess-wp' ), __( 'White background with pure black text for strong contrast.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'monochrome',        '&#9680;', __( 'Monochrome',            'openaccess-wp' ), __( 'Removes all color — useful for reducing visual distraction.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'invertColors',      '&#9683;', __( 'Invert Colors',         'openaccess-wp' ), __( 'Reverses all page colors — helpful for light-sensitive users.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'eyeSafe',           '&#127774;', __( 'Eye Safe (Warm)',       'openaccess-wp' ), __( 'Shifts to warm amber tones to reduce eye strain in low light.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'blueLightFilter',   '&#128161;', __( 'Blue Light Filter',    'openaccess-wp' ), __( 'Reduces blue light emission to protect eyes during evening use.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'rainbowText',       '&#127752;', __( 'Rainbow Text',         'openaccess-wp' ), __( 'Adds animated color to text — for fun and positive engagement.', 'openaccess-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'highContrastDark',  '&#9790;', __( 'High Contrast (Dark)',  'curbcut-wp' ), __( 'Black background with yellow text for maximum contrast.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'highContrastLight', '&#9788;', __( 'High Contrast (Light)', 'curbcut-wp' ), __( 'White background with pure black text for strong contrast.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'monochrome',        '&#9680;', __( 'Monochrome',            'curbcut-wp' ), __( 'Removes all color — useful for reducing visual distraction.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'invertColors',      '&#9683;', __( 'Invert Colors',         'curbcut-wp' ), __( 'Reverses all page colors — helpful for light-sensitive users.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'eyeSafe',           '&#127774;', __( 'Eye Safe (Warm)',       'curbcut-wp' ), __( 'Shifts to warm amber tones to reduce eye strain in low light.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'blueLightFilter',   '&#128161;', __( 'Blue Light Filter',    'curbcut-wp' ), __( 'Reduces blue light emission to protect eyes during evening use.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'rainbowText',       '&#127752;', __( 'Rainbow Text',         'curbcut-wp' ), __( 'Adds animated color to text — for fun and positive engagement.', 'curbcut-wp' ) ); ?>
 				</section>
 
 				<!-- ── Section 4: Navigation & Motor Aids ────────────────── -->
 				<section class="oawp-section" aria-labelledby="oawp-sec-nav">
 					<div class="oawp-section-header">
 						<span class="oawp-section-dot" aria-hidden="true"></span>
-						<h3 id="oawp-sec-nav" class="oawp-section-title"><?php esc_html_e( 'Navigation & Motor Aids', 'openaccess-wp' ); ?></h3>
+						<h3 id="oawp-sec-nav" class="oawp-section-title"><?php esc_html_e( 'Navigation & Motor Aids', 'curbcut-wp' ); ?></h3>
 					</div>
-					<?php oawp_toggle_btn( 'focusEnhancer',  '&#9641;',   __( 'Enhanced Focus Ring',   'openaccess-wp' ), __( 'Adds a bold visible outline to the focused element for keyboard users.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'bigCursor',      '&#8630;',   __( 'Large Cursor',          'openaccess-wp' ), __( 'Enlarges the mouse cursor for easier tracking on screen.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'cursorCrosshair','&#10010;',  __( 'Crosshair Cursor',      'openaccess-wp' ), __( 'Changes cursor to a crosshair shape for precise positioning.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'cursorLines',    '&#43;',     __( 'Cursor Lines',          'openaccess-wp' ), __( 'Overlays screen-wide crosshair lines to track your cursor exactly.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'highlightLinks', '&#128279;', __( 'Highlight Links',       'openaccess-wp' ), __( 'Adds bold styling and outlines to all clickable links.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'bigTargets',     '&#8853;',   __( 'Larger Click Targets',  'openaccess-wp' ), __( 'Enlarges buttons and links to meet the 44×44 px minimum touch target.', 'openaccess-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'focusEnhancer',  '&#9641;',   __( 'Enhanced Focus Ring',   'curbcut-wp' ), __( 'Adds a bold visible outline to the focused element for keyboard users.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'bigCursor',      '&#8630;',   __( 'Large Cursor',          'curbcut-wp' ), __( 'Enlarges the mouse cursor for easier tracking on screen.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'cursorCrosshair','&#10010;',  __( 'Crosshair Cursor',      'curbcut-wp' ), __( 'Changes cursor to a crosshair shape for precise positioning.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'cursorLines',    '&#43;',     __( 'Cursor Lines',          'curbcut-wp' ), __( 'Overlays screen-wide crosshair lines to track your cursor exactly.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'highlightLinks', '&#128279;', __( 'Highlight Links',       'curbcut-wp' ), __( 'Adds bold styling and outlines to all clickable links.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'bigTargets',     '&#8853;',   __( 'Larger Click Targets',  'curbcut-wp' ), __( 'Enlarges buttons and links to meet the 44×44 px minimum touch target.', 'curbcut-wp' ) ); ?>
 				</section>
 
 				<!-- Section 5: Reading Aids -->
 				<section class="oawp-section" aria-labelledby="oawp-sec-reading">
 					<div class="oawp-section-header">
 						<span class="oawp-section-dot" aria-hidden="true"></span>
-						<h3 id="oawp-sec-reading" class="oawp-section-title"><?php esc_html_e( 'Reading Aids', 'openaccess-wp' ); ?></h3>
+						<h3 id="oawp-sec-reading" class="oawp-section-title"><?php esc_html_e( 'Reading Aids', 'curbcut-wp' ); ?></h3>
 					</div>
-					<?php oawp_toggle_btn( 'readAloud',   '&#128266;', __( 'Read Aloud',    'openaccess-wp' ), __( 'Click any text to have it read aloud using your device\'s speech engine.', 'openaccess-wp' ) ); ?>
-					<?php oawp_toggle_btn( 'readingMode', '&#128214;', __( 'Reading Mode',  'openaccess-wp' ), __( 'Strips page chrome and shows just the article in a clean, focused view.', 'openaccess-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'readAloud',   '&#128266;', __( 'Read Aloud',    'curbcut-wp' ), __( 'Click any text to have it read aloud using your device\'s speech engine.', 'curbcut-wp' ) ); ?>
+					<?php oawp_toggle_btn( 'readingMode', '&#128214;', __( 'Reading Mode',  'curbcut-wp' ), __( 'Strips page chrome and shows just the article in a clean, focused view.', 'curbcut-wp' ) ); ?>
 				</section>
 
 			</div><!-- /#oawp-panel-body -->
@@ -313,8 +313,8 @@ function oawp_render_overlay() {
 	</div>
 
 	<div id="oawp-xp-balloon" role="status" aria-live="polite" aria-atomic="true">
-		<strong>&#127987;&#65039; OpenAccess WP</strong>
-		<?php esc_html_e( 'Windows XP mode activated. Thank you for using our product.', 'openaccess-wp' ); ?>
+		<strong>&#127987;&#65039; Curbcut WP</strong>
+		<?php esc_html_e( 'Windows XP mode activated. Thank you for using our product.', 'curbcut-wp' ); ?>
 	</div>
 	<?php
 }
@@ -328,7 +328,7 @@ function oawp_skip_link() {
 	$target_id = ! empty( $options['skip_target_id'] ) ? $options['skip_target_id'] : 'content';
 	?>
 	<a id="oawp-skip-link" href="#<?php echo esc_attr( $target_id ); ?>" class="oawp-skip-link">
-		<?php esc_html_e( 'Skip to main content', 'openaccess-wp' ); ?>
+		<?php esc_html_e( 'Skip to main content', 'curbcut-wp' ); ?>
 	</a>
 	<?php
 }
